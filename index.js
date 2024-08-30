@@ -7,37 +7,31 @@ require('dotenv').config();
 
 const app = express();
 
-// A porta é definida através da variável de ambiente PORT para Vercel e o valor padrão é 3000 para desenvolvimento local
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Servir arquivos estáticos da pasta 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Rota principal para servir a página inicial
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-// Rota para o envio do formulário
 app.post('/submit', (req, res) => {
   const { nome, email, assunto, complaint } = req.body;
 
-  // Configuração do transporte para o Nodemailer
   const transporter = nodemailer.createTransport({
-    service: 'Outlook365', // Pode ser 'Gmail' ou outro serviço se necessário
+    service: 'Outlook365', 
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS
     }
   });
 
-  // Opções do e-mail
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: process.env.EMAIL_USER, // Enviar o e-mail para o mesmo endereço
+    to: process.env.EMAIL_USER, 
     subject: `Suporte TI: ${assunto}`,
     html: `
       <html>
@@ -151,7 +145,6 @@ app.post('/submit', (req, res) => {
   });
 });
 
-// Inicia o servidor na porta definida
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
 });
