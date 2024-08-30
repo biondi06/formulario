@@ -274,19 +274,12 @@ select option {
     .container--parent, .image--aside {
         width: 100%;
     }
-
-    .image--aside img {
-        height: 40rem;
-        max-width: 100%;
-    }
 }
 
 @media (max-width: 768px) {
     .container {
         width: 95%;
-        padding
-
-: 2rem 1rem;
+        padding: 2rem 1rem;
         max-height: unset;
         overflow-y: unset;
     }
@@ -295,7 +288,9 @@ select option {
         font-size: 3.5rem;
     }
 
-    label, input, select, .list, #complaint {
+    label, input, select, 
+
+list, #complaint {
         font-size: 1.4rem; 
     }
 
@@ -303,6 +298,10 @@ select option {
         width: 12rem;
         height: 4.5rem;
         font-size: 1.6rem;
+    }
+
+    .image--aside img {
+        height: 30rem; /* Menor tamanho da imagem em tablets */
     }
 }
 
@@ -328,7 +327,8 @@ select option {
     }
 
     .image--aside img {
-        height: 30rem;
+        height: 20rem; /* Menor tamanho da imagem em dispositivos móveis */
+        max-width: 80%;
     }
 
     #container--main {
