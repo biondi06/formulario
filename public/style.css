@@ -327,7 +327,7 @@ list, #complaint {
     }
 
     .image--aside img {
-        height: 20rem; /* Menor tamanho da imagem em dispositivos móveis */
+        height: 17rem; /* Menor tamanho da imagem em dispositivos móveis */
         max-width: 80%;
     }
 
