@@ -32,7 +32,6 @@ body {
     align-items: center;
 }
 
-/* Keyframes */
 @keyframes gradientShift {
     0% { background-position: 0% 0%; }
     50% { background-position: 100% 100%; }
@@ -60,7 +59,6 @@ body {
     }
 }
 
-/* Layout and Elements */
 .container--parent {
     display: flex;
     justify-content: center;
@@ -263,7 +261,6 @@ select option {
     bottom: 0;
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
     #container--main {
         flex-direction: column;
@@ -301,7 +298,7 @@ list, #complaint {
     }
 
     .image--aside img {
-        height: 30rem; /* Menor tamanho da imagem em tablets */
+        height: 30rem; 
     }
 }
 
@@ -327,7 +324,7 @@ list, #complaint {
     }
 
     .image--aside img {
-        height: 17rem; /* Menor tamanho da imagem em dispositivos móveis */
+        height: 17rem; 
         max-width: 80%;
     }
 

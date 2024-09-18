@@ -2,12 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const path = require('path');
-const connection = require('./db'); // Importa a conexão com o banco de dados MySQL
+const connection = require('./db'); 
 require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-const host = '192.168.0.100';  // Atualize para o IP correto da sua máquina
+const host = '192.168.0.100';  
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -21,7 +21,6 @@ app.get('/', (req, res) => {
 app.post('/submit', (req, res) => {
   const { nome, email, assunto, complaint } = req.body;
 
-  // Inserir os dados no banco de dados MySQL
   const sql = 'INSERT INTO solicitacoes (nome, email, assunto, descricao) VALUES (?, ?, ?, ?)';
   connection.query(sql, [nome, email, assunto, complaint], (err, result) => {
     if (err) {
@@ -30,7 +29,6 @@ app.post('/submit', (req, res) => {
     }
     console.log('Solicitação salva no banco de dados com sucesso!');
 
-    // Agora, enviar o e-mail de confirmação
     const transporter = nodemailer.createTransport({
       service: 'Outlook365',
       auth: {
