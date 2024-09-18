@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+const host = '192.168.0.100';  // Atualize para o IP correto da sua máquina
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -31,7 +32,7 @@ app.post('/submit', (req, res) => {
 
     // Agora, enviar o e-mail de confirmação
     const transporter = nodemailer.createTransport({
-      service: 'Outlook365', 
+      service: 'Outlook365',
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
@@ -40,7 +41,7 @@ app.post('/submit', (req, res) => {
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER, 
+      to: process.env.EMAIL_USER,
       subject: `Suporte TI: ${assunto}`,
       html: `
         <html>
@@ -155,6 +156,6 @@ app.post('/submit', (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
+app.listen(port, host, () => {
+  console.log(`Servidor rodando em http://${host}:${port}`);
 });
