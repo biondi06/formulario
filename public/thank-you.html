@@ -7,9 +7,13 @@
     <link rel="stylesheet" href="thank-you.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
         .message-cloud {
             position: fixed;
             top: 20px;
@@ -72,6 +76,59 @@
                 width: 0%;
             }
         }
+
+        .developer-info {
+            position: fixed;
+            bottom: -100px; /* Inicia fora da tela */
+            left: 50%;
+            transform: translateX(-50%); /* Centralizado horizontalmente */
+            background: #041b33; /* Usando azul escuro do site */
+            padding: 10px 20px; /* Diminuindo o padding */
+            border-radius: 20px; /* Ajustando o arredondamento */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            font-size: 0.9rem; /* Reduzindo o tamanho da fonte */
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px; /* Ajustando o espaçamento entre texto e ícone */
+            animation: slideUp 1.5s ease-in-out forwards; /* Animação para subir */
+            z-index: 1001; /* Garantindo que o elemento seja visível */
+        }
+
+        .developer-info p {
+            margin: 0;
+            font-weight: 500;
+            font-size: 1.2rem; /* Diminuindo o tamanho da fonte do texto */
+        }
+
+        .developer-info i {
+            font-size: 1.6rem; /* Reduzindo o tamanho do ícone */
+            margin-left: 8px;
+            animation: guitarWobble 2s infinite;
+        }
+
+        @keyframes slideUp {
+            from {
+                bottom: -100px; /* Fora da tela, parte inferior */
+                opacity: 0;
+            }
+            to {
+                bottom: 57px; /* Posição final na tela */
+                opacity: 1;
+            }
+        }
+
+        @keyframes guitarWobble {
+            0%, 100% {
+                transform: rotate(0);
+            }
+            50% {
+                transform: rotate(10deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -92,6 +149,11 @@
                 <a href="index.html" class="btn">Voltar para o formulário</a>
             </div>
         </main>
+    </div>
+
+    <div class="developer-info">
+        <p>Desenvolvido por: Daniel Biondi - Estagiário de TI</p>
+        <i>🎸</i>
     </div>
 
     <footer class="footer-bottom">
@@ -123,7 +185,6 @@
                 }, 300); 
             }, 5000);
         }
-
 
         const urlParams = new URLSearchParams(window.location.search);
         const status = urlParams.get('status'); 
