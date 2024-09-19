@@ -12,6 +12,9 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
+            overflow: hidden; /* Remover rolagem */
+            margin: 0;
+            padding: 0;
         }
 
         .message-cloud {
@@ -82,32 +85,34 @@
             bottom: -100px; /* Inicia fora da tela */
             left: 50%;
             transform: translateX(-50%); /* Centralizado horizontalmente */
-            background: #041b33; /* Usando azul escuro do site */
-            padding: 10px 20px; /* Diminuindo o padding */
-            border-radius: 20px; /* Ajustando o arredondamento */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            font-size: 0.9rem; /* Reduzindo o tamanho da fonte */
+            background: linear-gradient(90deg, #041b33, #0a3757); /* Gradiente moderno com tons de azul */
+            padding: 15px 30px; /* Ajuste para maior harmonia visual */
+            border-radius: 30px; /* Arredondamento mais suave */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Sombra suave e mais profunda */
+            font-size: 0.9rem; /* Mantendo tamanho de texto proporcional */
             font-family: 'Poppins', sans-serif;
             color: #fff;
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px; /* Ajustando o espaçamento entre texto e ícone */
+            gap: 15px; /* Espaçamento adequado entre texto e ícone */
             animation: slideUp 1.5s ease-in-out forwards; /* Animação para subir */
             z-index: 1001; /* Garantindo que o elemento seja visível */
+            opacity: 0.9; /* Leve transparência para modernidade */
         }
 
         .developer-info p {
             margin: 0;
             font-weight: 500;
-            font-size: 1.2rem; /* Diminuindo o tamanho da fonte do texto */
+            font-size: 1.2rem; /* Tamanho da fonte ajustado */
+            letter-spacing: 0.5px; /* Espaçamento entre letras para um visual mais limpo */
         }
 
         .developer-info i {
-            font-size: 1.6rem; /* Reduzindo o tamanho do ícone */
+            font-size: 1.6rem; /* Tamanho do ícone ajustado */
             margin-left: 8px;
-            animation: guitarWobble 2s infinite;
+            animation: guitarWobble 2s infinite; /* Movimento sutil no ícone */
         }
 
         @keyframes slideUp {
@@ -116,7 +121,7 @@
                 opacity: 0;
             }
             to {
-                bottom: 57px; /* Posição final na tela */
+                bottom: 60px; /* Posição final na tela */
                 opacity: 1;
             }
         }
@@ -129,6 +134,30 @@
                 transform: rotate(10deg);
             }
         }
+
+        /* Restaurando a animação de sombra azul */
+        .shadow-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 123, 255, 0.2);
+            box-shadow: 0 0 30px 60px rgba(0, 123, 255, 0.3);
+            z-index: -1;
+            animation: shadowPulse 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes shadowPulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1.05);
+                opacity: 0.9;
+            }
+        }
     </style>
 </head>
 <body>
@@ -137,10 +166,10 @@
         <p>THOMAZ ALVES ADVOGADOS - SUPORTE TI</p>
     </header>
 
-    <div id="container--main">
-        <div class="image--aside">
+    <div class="shadow-animation"></div> <!-- Animação de sombra azul -->
 
-        </div>
+    <div id="container--main">
+        <div class="image--aside"></div>
 
         <main class="container--parent">
             <div class="container">
