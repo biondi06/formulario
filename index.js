@@ -21,6 +21,12 @@ app.get('/', (req, res) => {
 app.post('/submit', (req, res) => {
   const { nome, email, assunto, complaint } = req.body;
 
+  // Verificar o formato do e-mail
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).send('E-mail inválido. Por favor, insira um e-mail válido.');
+  }
+
   const sql = 'INSERT INTO solicitacoes (nome, email, assunto, descricao) VALUES (?, ?, ?, ?)';
   connection.query(sql, [nome, email, assunto, complaint], (err, result) => {
     if (err) {
@@ -37,7 +43,8 @@ app.post('/submit', (req, res) => {
       }
     });
 
-    const mailOptions = {
+    // Email para o administrador
+    const mailOptionsAdmin = {
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
       subject: `Suporte TI: ${assunto}`,
@@ -49,7 +56,7 @@ app.post('/submit', (req, res) => {
               font-family: 'Roboto', sans-serif;
               margin: 0;
               padding: 0;
-              background: #ffffff; /* Fundo branco */
+              background: #ffffff;
               color: #333;
               text-align: center;
             }
@@ -73,7 +80,7 @@ app.post('/submit', (req, res) => {
               max-width: 100%;
               height: auto;
               border-radius: 12px 12px 0 0;
-              border-bottom: 4px solid #041b33; /* Linha inferior azul para destaque */
+              border-bottom: 4px solid #041b33;
             }
             h1 {
               font-weight: 700;
@@ -82,16 +89,13 @@ app.post('/submit', (req, res) => {
               color: #041b33;
               font-family: 'Poppins', sans-serif;
               letter-spacing: 1px;
-              text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-              background: linear-gradient(135deg, #041b33, #041b33);
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
               margin-bottom: 1.5rem;
             }
             p {
               font-size: 1.2rem;
               margin: 0.5rem 0;
               line-height: 1.5;
+              text-align: center;
             }
             .footer {
               margin-top: 20px;
@@ -101,6 +105,7 @@ app.post('/submit', (req, res) => {
               padding: 10px 0;
               position: relative;
               background: #ffffff;
+              text-align: center;
             }
             .button {
               display: inline-block;
@@ -141,15 +146,131 @@ app.post('/submit', (req, res) => {
       `
     };
 
-    console.log('Tentando enviar e-mail...');
+    // Email de confirmação para o usuário (informações centralizadas)
+    const mailOptionsUser = {
+      from: process.env.EMAIL_USER,
+      to: email, // O email que o usuário preencheu no formulário
+      subject: 'Confirmação de Solicitação de Suporte TI',
+      html: `
+        <html>
+        <head>
+          <style>
+            body {
+              font-family: 'Roboto', sans-serif;
+              margin: 0;
+              padding: 0;
+              background: #ffffff;
+              color: #333;
+              text-align: center;
+            }
+            .container {
+              max-width: 600px;
+              margin: 20px auto;
+              background: #ffffff;
+              color: #333;
+              border-radius: 12px;
+              padding: 20px;
+              box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+              border: 1px solid #ddd;
+              position: relative;
+              overflow: hidden;
+            }
+            .header {
+              background: #ffffff;
+              padding: 10px 0;
+            }
+            .header img {
+              max-width: 100%;
+              height: auto;
+              border-radius: 12px 12px 0 0;
+              border-bottom: 4px solid #041b33;
+            }
+            h1 {
+              font-weight: 700;
+              font-size: 2.5rem;
+              margin: 1rem 0;
+              color: #041b33;
+              font-family: 'Poppins', sans-serif;
+              letter-spacing: 1px;
+              margin-bottom: 1.5rem;
+              text-align: center;
+            }
+            p {
+              font-size: 1.2rem;
+              margin: 0.5rem 0;
+              line-height: 1.5;
+              text-align: center; /* Centralizando o conteúdo */
+            }
+            .footer {
+              margin-top: 20px;
+              font-size: 1rem;
+              color: #041b33;
+              border-top: 2px solid #041b33;
+              padding: 10px 0;
+              position: relative;
+              background: #ffffff;
+              text-align: center; /* Centralizando o rodapé */
+            }
+            .button {
+              display: inline-block;
+              padding: 10px 20px;
+              border-radius: 30px;
+              background: #041b33;
+              color: #ffffff;
+              text-decoration: none;
+              font-weight: bold;
+              font-size: 1.2rem;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+              transition: background 0.3s ease, transform 0.3s ease;
+            }
+            .button:hover {
+              background: #003366;
+              transform: translateY(-2px);
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <img src="https://app.tangerino.com.br/Tangerino/pages/image?banner=14727" alt="Banner">
+            </div>
+            <h1>Confirmação de Solicitação de TI</h1>
+            <p>Olá, ${nome}!</p>
+            <p>Recebemos sua solicitação de suporte com o seguinte assunto:</p>
+            <p><strong>${assunto}</strong></p>
+            <p>Nossa equipe está trabalhando para resolver sua solicitação. Você receberá uma resposta em breve.</p>
+            <div class="footer">
+              <p>&copy; 2024 Thomaz Alves Advogados. Todos os direitos reservados.</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `
+    };
 
-    transporter.sendMail(mailOptions, (error, info) => {
+    // Enviar e-mail para o administrador
+    transporter.sendMail(mailOptionsAdmin, (error, info) => {
       if (error) {
-        console.error('Erro ao enviar o e-mail:', error);
+        console.error('Erro ao enviar e-mail para o administrador:', error);
         return res.status(500).send('Erro ao enviar o e-mail.');
       }
-      console.log('E-mail enviado:', info.response);
-      res.redirect('/thank-you.html?status=success');
+      console.log('E-mail para o administrador enviado:', info.response);
+
+      // Enviar e-mail de confirmação para o usuário
+      transporter.sendMail(mailOptionsUser, (error, info) => {
+        if (error) {
+          console.error('Erro ao enviar e-mail de confirmação para o usuário:', error);
+
+          // Verificar se o erro está relacionado ao e-mail do usuário (caso o e-mail não exista)
+          if (error.response && error.response.includes('550')) {
+            return res.status(400).send('O e-mail fornecido não existe. Por favor, verifique e tente novamente.');
+          } else {
+            return res.status(500).send('Erro ao enviar o e-mail.');
+          }
+        }
+        console.log('E-mail de confirmação enviado para o usuário:', info.response);
+        res.redirect('/thank-you.html?status=success');
+      });
     });
   });
 });

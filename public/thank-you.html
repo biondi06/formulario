@@ -12,7 +12,7 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            overflow: hidden; /* Remover rolagem */
+            overflow: hidden; 
             margin: 0;
             padding: 0;
         }
@@ -82,46 +82,46 @@
 
         .developer-info {
             position: fixed;
-            bottom: -100px; /* Inicia fora da tela */
+            bottom: -100px; 
             left: 50%;
-            transform: translateX(-50%); /* Centralizado horizontalmente */
-            background: linear-gradient(90deg, #041b33, #0a3757); /* Gradiente moderno com tons de azul */
-            padding: 15px 30px; /* Ajuste para maior harmonia visual */
-            border-radius: 30px; /* Arredondamento mais suave */
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Sombra suave e mais profunda */
-            font-size: 0.9rem; /* Mantendo tamanho de texto proporcional */
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, #041b33, #0a3757); 
+            padding: 15px 30px; 
+            border-radius: 30px; 
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); 
+            font-size: 0.9rem; 
             font-family: 'Poppins', sans-serif;
             color: #fff;
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px; /* Espaçamento adequado entre texto e ícone */
-            animation: slideUp 1.5s ease-in-out forwards; /* Animação para subir */
-            z-index: 1001; /* Garantindo que o elemento seja visível */
-            opacity: 0.9; /* Leve transparência para modernidade */
+            gap: 15px; 
+            animation: slideUp 1.5s ease-in-out forwards; 
+            z-index: 1001; 
+            opacity: 0.9; 
         }
 
         .developer-info p {
             margin: 0;
             font-weight: 500;
-            font-size: 1.2rem; /* Tamanho da fonte ajustado */
-            letter-spacing: 0.5px; /* Espaçamento entre letras para um visual mais limpo */
+            font-size: 1.2rem; 
+            letter-spacing: 0.5px;
         }
 
         .developer-info i {
-            font-size: 1.6rem; /* Tamanho do ícone ajustado */
+            font-size: 1.6rem; 
             margin-left: 8px;
-            animation: guitarWobble 2s infinite; /* Movimento sutil no ícone */
+            animation: guitarWobble 2s infinite; 
         }
 
         @keyframes slideUp {
             from {
-                bottom: -100px; /* Fora da tela, parte inferior */
+                bottom: -100px; 
                 opacity: 0;
             }
             to {
-                bottom: 60px; /* Posição final na tela */
+                bottom: 60px; 
                 opacity: 1;
             }
         }
@@ -135,7 +135,6 @@
             }
         }
 
-        /* Restaurando a animação de sombra azul */
         .shadow-animation {
             position: absolute;
             top: 0;
@@ -166,7 +165,7 @@
         <p>THOMAZ ALVES ADVOGADOS - SUPORTE TI</p>
     </header>
 
-    <div class="shadow-animation"></div> <!-- Animação de sombra azul -->
+    <div class="shadow-animation"></div> 
 
     <div id="container--main">
         <div class="image--aside"></div>
