@@ -63,7 +63,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50%;
+    width: 55%; 
     animation: fade-in 1s;
 }
 
@@ -71,7 +71,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50%;
+    width: 45%; 
     animation: fade-in 1s;
 }
 
@@ -82,7 +82,7 @@ body {
     background-color: #041b33;
     filter: none;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .image--aside img:hover {
@@ -95,8 +95,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 85%;
-    max-width: 700px;
+    width: 70%; 
+    max-width: 850px;
     background: #ffffff;
     border-radius: 24px;
     box-shadow: 0 12px 36px rgba(0, 0, 0, 0.2);
@@ -104,6 +104,12 @@ body {
     border: 1px solid #041b33;
     max-height: 82vh;
     overflow-y: auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-10px); 
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
 }
 
 h1 {
@@ -118,27 +124,50 @@ h1 {
 }
 
 label {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     font-weight: 600;
     color: #041b33;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.8rem;
     display: block;
     width: 100%;
     text-align: center;
+    transition: color 0.3s ease;
 }
 
-input, select, .list, #complaint {
-    width: 100%;
+#section-solicitante input, #section-solicitante select {
+    width: 140%; 
+    margin-left: -20%;
     margin-bottom: 1.6rem;
-    padding: 1.4rem;
-    border-radius: 16px;
+    padding: 1.6rem;
+    border-radius: 20px;
     border: 1px solid #041b33;
-    background-color: #cdd1d3;
+    background-color: #f0f3f5;
     color: #041b33;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     text-align: center;
-    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+#section-solicitacao select {
+    width: 100%; 
+    margin-bottom: 1.6rem;
+    padding: 1.6rem;
+    border-radius: 20px;
+    border: 1px solid #041b33;
+    background-color: #f0f3f5;
+    color: #041b33;
+    font-size: 1.8rem;
+    text-align: center;
+    box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+#section-solicitante input:focus, #section-solicitante select:focus,
+#section-solicitacao select:focus {
+    background-color: #ffffff;
+    transform: scale(1.02);
+    box-shadow: 0 0 10px rgba(4, 27, 51, 0.3);
 }
 
 input::placeholder, #complaint::placeholder {
@@ -146,8 +175,30 @@ input::placeholder, #complaint::placeholder {
 }
 
 input:focus, select:focus, .list:focus, #complaint:focus {
-    transform: scale(1.02);
-    box-shadow: 0 0 12px rgba(4, 27, 51, 0.3);
+    transform: scale(1.05); 
+    box-shadow: 0 0 12px rgba(4, 27, 51, 0.4);
+    outline: none;
+    background-color: #ffffff;
+}
+
+#section-detalhes input, #section-detalhes textarea, #section-detalhes select {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1.6rem;
+    padding: 1.6rem;
+    border-radius: 20px;
+    border: 1px solid #041b33;
+    background-color: #f0f3f5;
+    color: #041b33;
+    font-size: 1.8rem;
+    box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+#section-detalhes input:focus, #section-detalhes textarea:focus, #section-detalhes select:focus {
+    background-color: #ffffff;
+    transform: scale(1.05);
+    box-shadow: 0 0 12px rgba(4, 27, 51, 0.4);
     outline: none;
 }
 
@@ -165,7 +216,7 @@ input:focus, select:focus, .list:focus, #complaint:focus {
 
 .checkbox--camp label {
     margin-left: 1rem;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-family: 'Poppins', sans-serif;
     color: #041b33;
     animation: fade-in 0.5s;
@@ -181,7 +232,7 @@ input:focus, select:focus, .list:focus, #complaint:focus {
 }
 
 .btn {
-    width: 14rem;
+    width: 16rem;
     height: 5rem;
     margin-top: 1.6rem;
     border-radius: 30px;
@@ -196,40 +247,23 @@ input:focus, select:focus, .list:focus, #complaint:focus {
 
 .btn:hover {
     background: linear-gradient(135deg, #002d50, #e0e3e5);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transform: translateY(-2px);
-}
-
-select {
-    width: 100%;
-    padding: 1.4rem;
-    border-radius: 16px;
-    border: 1px solid #041b33;
-    background-color: #cdd1d3;
-    color: #041b33;
-    font-size: 1.6rem;
-    text-align: center;
-    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-select option {
-    text-align: center;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    transform: translateY(-4px);
 }
 
 #complaint {
     width: 100%;
-    height: 10rem;
+    height: 12rem;
     resize: none;
     margin-bottom: 1.6rem;
-    padding: 1.4rem;
+    padding: 1.6rem;
     border-radius: 16px;
     border: 1px solid #041b33;
-    background-color: #cdd1d3;
+    background-color: #f0f3f5;
     color: #041b33;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     text-align: center;
-    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
@@ -242,7 +276,7 @@ select option {
     border-color: #041b33;
     box-shadow: 0 0 12px rgba(4, 27, 51, 0.3);
     outline: none;
-    transform: scale(1.02);
+    transform: scale(1.05);
 }
 
 .footer-top, .footer-bottom {
@@ -285,9 +319,7 @@ select option {
         font-size: 3.5rem;
     }
 
-    label, input, select, 
-
-list, #complaint {
+    label, input, select, .list, #complaint {
         font-size: 1.4rem; 
     }
 

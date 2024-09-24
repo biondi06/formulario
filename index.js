@@ -2,12 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const path = require('path');
-const connection = require('./db'); 
+const connection = require('./db');
 require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-const host = '192.168.0.100';  
+const host = '192.168.0.100';
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -19,22 +19,29 @@ app.get('/', (req, res) => {
 });
 
 app.post('/submit', (req, res) => {
-  const { nome, email, assunto, complaint } = req.body;
+  const { nome, email, setor, assunto, complaint, dataProblema, comportamento, responsabilidade } = req.body;
 
-  // Verificar o formato do e-mail
+  // Verificar e-mail
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     return res.status(400).send('E-mail inválido. Por favor, insira um e-mail válido.');
   }
 
-  const sql = 'INSERT INTO solicitacoes (nome, email, assunto, descricao) VALUES (?, ?, ?, ?)';
-  connection.query(sql, [nome, email, assunto, complaint], (err, result) => {
+  // Verificar responsabilidade
+  if (!responsabilidade) {
+    return res.status(400).send('Você deve concordar com os termos do site.');
+  }
+
+  // Inserir dados no banco de dados, removendo `tipoSolicitacao`
+  const sql = 'INSERT INTO solicitacoes (nome, email, setor, assunto, descricao, dataProblema, comportamento) VALUES (?, ?, ?, ?, ?, ?, ?)';
+  connection.query(sql, [nome, email, setor, assunto, complaint, dataProblema, comportamento], (err, result) => {
     if (err) {
       console.error('Erro ao salvar no banco de dados:', err);
       return res.status(500).send('Erro ao salvar a solicitação.');
     }
     console.log('Solicitação salva no banco de dados com sucesso!');
 
+    // Configuração do e-mail
     const transporter = nodemailer.createTransport({
       service: 'Outlook365',
       auth: {
@@ -43,7 +50,7 @@ app.post('/submit', (req, res) => {
       }
     });
 
-    // Email para o administrador
+    // E-mail para o administrador
     const mailOptionsAdmin = {
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
@@ -133,8 +140,11 @@ app.post('/submit', (req, res) => {
             <h1>Nova Solicitação de TI</h1>
             <p><strong>Nome:</strong> ${nome}</p>
             <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Setor:</strong> ${setor}</p>
             <p><strong>Assunto:</strong> ${assunto}</p>
-            <p><strong>Mensagem:</strong></p>
+            <p><strong>Data do Problema:</strong> ${dataProblema}</p>
+            <p><strong>Comportamento Observado:</strong> ${comportamento}</p>
+            <p><strong>Descrição:</strong></p>
             <p>${complaint}</p>
             <div class="footer">
               <p>&copy; 2024 Thomaz Alves Advogados. Todos os direitos reservados.</p>
@@ -146,10 +156,10 @@ app.post('/submit', (req, res) => {
       `
     };
 
-    // Email de confirmação para o usuário (informações centralizadas)
+    // E-mail de confirmação para o usuário
     const mailOptionsUser = {
       from: process.env.EMAIL_USER,
-      to: email, // O email que o usuário preencheu no formulário
+      to: email,
       subject: 'Confirmação de Solicitação de Suporte TI',
       html: `
         <html>
@@ -199,7 +209,7 @@ app.post('/submit', (req, res) => {
               font-size: 1.2rem;
               margin: 0.5rem 0;
               line-height: 1.5;
-              text-align: center; /* Centralizando o conteúdo */
+              text-align: center;
             }
             .footer {
               margin-top: 20px;
@@ -209,23 +219,7 @@ app.post('/submit', (req, res) => {
               padding: 10px 0;
               position: relative;
               background: #ffffff;
-              text-align: center; /* Centralizando o rodapé */
-            }
-            .button {
-              display: inline-block;
-              padding: 10px 20px;
-              border-radius: 30px;
-              background: #041b33;
-              color: #ffffff;
-              text-decoration: none;
-              font-weight: bold;
-              font-size: 1.2rem;
-              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-              transition: background 0.3s ease, transform 0.3s ease;
-            }
-            .button:hover {
-              background: #003366;
-              transform: translateY(-2px);
+              text-align: center;
             }
           </style>
         </head>
@@ -248,7 +242,7 @@ app.post('/submit', (req, res) => {
       `
     };
 
-    // Enviar e-mail para o administrador
+    // Enviar e-mails
     transporter.sendMail(mailOptionsAdmin, (error, info) => {
       if (error) {
         console.error('Erro ao enviar e-mail para o administrador:', error);
@@ -256,12 +250,10 @@ app.post('/submit', (req, res) => {
       }
       console.log('E-mail para o administrador enviado:', info.response);
 
-      // Enviar e-mail de confirmação para o usuário
       transporter.sendMail(mailOptionsUser, (error, info) => {
         if (error) {
           console.error('Erro ao enviar e-mail de confirmação para o usuário:', error);
 
-          // Verificar se o erro está relacionado ao e-mail do usuário (caso o e-mail não exista)
           if (error.response && error.response.includes('550')) {
             return res.status(400).send('O e-mail fornecido não existe. Por favor, verifique e tente novamente.');
           } else {

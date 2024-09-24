@@ -2,93 +2,131 @@
 
     'use-strict'
 
-    const form = document.querySelector('.validator--form')
-    let inputUser = document.querySelector('#user-name')
-    let inputEmail = document.querySelector('#email')
-    let inputSubject = document.querySelector('.list')
-    let textArea = document.querySelector('#complaint')
-    const feedbackMessageError = document.querySelector('.feedbackMessageError')
-    const btnClose = document.querySelector('.btn--close')
-    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+    const form = document.querySelector('.validator--form');
+    let inputUser = document.querySelector('#user-name');
+    let inputEmail = document.querySelector('#email');
+    let inputSetor = document.querySelector('#setor');
+    let inputSubject = document.querySelector('#tipo-solicitacao');
+    let textArea = document.querySelector('#complaint');
+    let inputDataProblema = document.querySelector('#data-problema');
+    let inputComportamento = document.querySelector('#comportamento');
+    const feedbackMessageError = document.querySelector('.feedbackMessageError');
+    const btnClose = document.querySelector('.btn--close');
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
-    form.addEventListener('submit',function(e){
+    const sections = ['section-solicitante', 'section-solicitacao', 'section-detalhes'];
+    let currentSectionIndex = 0;
 
-        if(!inputUser.value || !inputEmail.value || !inputSubject.value){
-            showError('Existem campos vazios', function(){
-                inputUser.focus()
-            })
-            e.preventDefault()
+    function nextSection() {
+        if (!validateCurrentSection()) {
+            return;
         }
-        else if(inputUser.value.length < 3 && !emailRegex.test(inputEmail.value)){
-            showError('Nome de usuário e e-mail são invalidos', function(){
-                inputUser.focus()
-                inputUser.value = ''
-                inputEmail.value = ''
-            })
-            e.preventDefault()
+        if (currentSectionIndex < sections.length - 1) {
+            document.getElementById(sections[currentSectionIndex]).classList.remove('active');
+            currentSectionIndex++;
+            document.getElementById(sections[currentSectionIndex]).classList.add('active');
         }
-        else if(inputUser.value.length < 3){
-            showError('Nome de usuário é invalido', function(){
-                inputUser.focus()
-                inputUser.value = ''
-            })
-            e.preventDefault()
-        }
-        else if(!emailRegex.test(inputEmail.value)){
-            showError('O e-mail é invalido', function(){
-                inputEmail.focus()
-                inputEmail.value = ''
-            })
-            e.preventDefault()
-        }
-
-    })
-
-    function showError(msg,cb){
-
-        const spanElement = document.querySelector('.span--1')
-        const createdElement = document.createElement('p')
-
-        inputUser.disabled = true
-        inputEmail.disabled = true
-        inputSubject.disabled = true
-        textArea.disabled = true
-        checkBox1.disabled = true
-        btnSubmit.disabled = true
-
-        feedbackMessageError.classList.add('show')
-        createdElement.textContent = msg
-        spanElement.appendChild(createdElement)
-        
-        function hideFeedBack(){
-            feedbackMessageError.classList.remove('show')
-            feedbackMessageError.removeEventListener('click', hideFeedBack)
-            createdElement.remove()
-            
-            inputUser.disabled = false
-            inputEmail.disabled = false
-            inputSubject.disabled = false
-            textArea.disabled = false
-            checkBox1.disabled = false
-            btnSubmit.disabled = false
-
-            cb()
-        }
-        btnClose.addEventListener('click', hideFeedBack)
-
     }
 
+    function previousSection() {
+        if (currentSectionIndex > 0) {
+            document.getElementById(sections[currentSectionIndex]).classList.remove('active');
+            currentSectionIndex--;
+            document.getElementById(sections[currentSectionIndex]).classList.add('active');
+        }
+    }
 
-    let btnSubmit = document.querySelector('.btn')
+    function validateCurrentSection() {
+        let isValid = true;
+        let errorMessage = '';
 
-    btnSubmit.disabled = true
+        if (currentSectionIndex === 0) {
+            if (!inputUser.value) {
+                errorMessage += 'Nome completo é obrigatório. ';
+                isValid = false;
+            } else if (inputUser.value.length < 3) {
+                errorMessage += 'O nome precisa ter pelo menos 3 caracteres. ';
+                isValid = false;
+            }
 
-    let checkBox1 = document.querySelector('#responsability')
+            if (!inputEmail.value) {
+                errorMessage += 'E-mail é obrigatório. ';
+                isValid = false;
+            } else if (!emailRegex.test(inputEmail.value)) {
+                errorMessage += 'O e-mail informado é inválido. ';
+                isValid = false;
+            }
 
-    checkBox1.addEventListener('change',function(){
+            if (!inputSetor.value) {
+                errorMessage += 'Setor é obrigatório. ';
+                isValid = false;
+            }
+        }
 
-        btnSubmit.disabled = !this.checked
+        if (currentSectionIndex === 1) {
+            if (!inputSubject.value) {
+                errorMessage += 'Tipo de solicitação é obrigatório. ';
+                isValid = false;
+            }
+            if (!textArea.value) {
+                errorMessage += 'Descrição do problema é obrigatória. ';
+                isValid = false;
+            }
+        }
 
-    })
+        if (currentSectionIndex === 2) {
+            if (!inputDataProblema.value) {
+                errorMessage += 'Data e hora do problema são obrigatórias. ';
+                isValid = false;
+            }
+            if (!inputComportamento.value) {
+                errorMessage += 'Descrição do comportamento observado é obrigatória. ';
+                isValid = false;
+            }
+            if (!document.querySelector('#responsabilidade').checked) {
+                errorMessage += 'É necessário concordar com os termos do site. ';
+                isValid = false;
+            }
+        }
 
-})()
+        if (!isValid) {
+            showError(errorMessage);
+        }
+
+        return isValid;
+    }
+
+    function showError(msg) {
+        const spanElement = document.querySelector('.span--1');
+        spanElement.innerHTML = '';
+        const createdElement = document.createElement('p');
+        createdElement.textContent = msg;
+
+        feedbackMessageError.classList.add('show');
+        spanElement.appendChild(createdElement);
+
+        function hideFeedBack() {
+            feedbackMessageError.classList.remove('show');
+            createdElement.remove();
+        }
+
+        btnClose.addEventListener('click', hideFeedBack);
+    }
+
+    document.querySelectorAll('.btn-next').forEach((btn) => {
+        btn.addEventListener('click', nextSection);
+    });
+
+    document.querySelectorAll('.btn-back').forEach((btn) => {
+        btn.addEventListener('click', previousSection);
+    });
+
+    form.addEventListener('submit', function (e) {
+        if (!validateCurrentSection()) {
+            e.preventDefault();
+        } else {
+            form.submit();
+        }
+    });
+
+})();

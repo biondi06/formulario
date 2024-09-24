@@ -9,6 +9,94 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+
+        .section { display: none; }
+        .section.active { display: block; }
+        .hidden { display: none; }
+
+        .form-actions { margin-top: 20px; display: flex; justify-content: space-between; }
+        .btn { padding: 10px 20px; background-color: #041b33; color: white; border: none; cursor: pointer; border-radius: 5px; font-size: 16px; transition: background-color 0.3s, transform 0.3s; }
+        .btn:hover { background-color: #003366; transform: scale(1.05); }
+        .btn-back { background-color: #f50057; }
+        .btn-back:hover { background-color: #c51162; }
+
+        .feedbackMessageError {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .feedbackMessageError.show {
+            display: block;
+        }
+
+        .feedbackMessageError .btn--close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #721c24;
+            cursor: pointer;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 10px;
+            font-size: 16px;
+            resize: none;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+        }
+
+        input[type="text"], input[type="email"], select, input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="datetime-local"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            appearance: none;
+            background: none;
+        }
+
+        .description-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .description-container textarea {
+            max-width: 600px;
+            min-width: 300px;
+            width: 100%;
+        }
+
+        .centered-description {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+    </style>
 </head>
 <body>
 
@@ -20,7 +108,7 @@
         <div class="image--aside">
             <div class="feedbackMessageError">
                 <span class="span--1"></span>
-                <button class="btn--close"></button>
+                <button class="btn--close">×</button>
             </div>
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnrKPfAqlexvKj0tRlHeuzBWffLikVTInyRQ&s" alt="Ilustração">
         </div>
@@ -28,29 +116,71 @@
         <main class="container--parent">
             <div class="container">
                 <h1>Faça sua solicitação</h1>
-                <form id="contact-form" class="validator--form" action="/submit" method="POST">
-                    <label for="user-name">Nome</label>
-                    <input type="text" id="user-name" name="nome" placeholder="Digite aqui" required><br>
-                    <label for="email">Endereço de e-mail</label>
-                    <input type="email" id="email" name="email" placeholder="Ex: daniel.biondi@thomazalves.com.br" required><br>
-                    <label for="subject">Assunto</label>
-                    <select id="subject" name="assunto" required>
-                        <option value="">Selecione...</option>
-                        <option>Manutenção</option>
-                        <option>WEB (sites)</option>
-                        <option>Microsoft 365</option>
-                        <option>Perifericos(mouse, teclado, fone e etc)</option>
-                        <option>Eletrônicos</option>
-                        <option value="Outros">Outros</option>
-                    </select><br>
-                    <textarea id="complaint" name="complaint" placeholder="Descreva o motivo da solicitação..." required></textarea>
-                    <div class="form-actions">
-                        <div class="checkbox--camp">
-                            <input type="checkbox" id="responsability" name="responsabilidade" required>
-                            <label for="responsability">Eu estou de acordo com os termos do site.</label>
+                
+                <form id="contact-form" action="/submit" method="POST">
+                    <section id="section-solicitante" class="section active fade-in">
+                        <label for="user-name">Nome completo</label>
+                        <input type="text" id="user-name" name="nome" placeholder="Digite aqui" required><br>
+
+                        <label for="email">Endereço de e-mail</label>
+                        <input type="email" id="email" name="email" placeholder="Ex: daniel.biondi@thomazalves.com.br" required><br>
+
+                        <label for="setor">Setor</label>
+                        <select id="setor" name="setor" required>
+                            <option value="">Selecione...</option>
+                            <option>Administrativo</option>
+                            <option>Atendimento</option>
+                            <option>Financeiro</option>
+                            <option>Previdenciário</option>
+                            <option>Trabalhista</option>
+                        </select><br>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-next">Próximo</button>
                         </div>
-                        <input class="btn" type="submit" value="Enviar">
-                    </div>
+                    </section>
+
+                    <section id="section-solicitacao" class="section fade-in">
+                        <label for="assunto">Assunto</label>
+                        <select id="assunto" name="assunto" required>
+                            <option value="">Selecione...</option>
+                            <option>Manutenção</option>
+                            <option>WEB (sites)</option>
+                            <option>Microsoft 365</option>
+                            <option>Periféricos (mouse, teclado, fone etc)</option>
+                            <option>Eletrônicos</option>
+                            <option>Outros</option>
+                        </select><br>
+
+                        <label for="complaint">Descreva o problema</label>
+                        <textarea id="complaint" name="complaint" placeholder="Descreva o motivo da solicitação..." required></textarea>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-back">Voltar</button>
+                            <button type="button" class="btn btn-next">Próximo</button>
+                        </div>
+                    </section>
+
+                    <section id="section-detalhes" class="section fade-in">
+                        <label for="data-problema">Data e hora do início do problema</label>
+                        <input type="datetime-local" id="data-problema" name="dataProblema" required><br>
+
+                        <label for="imagem">Anexar imagens (opcional)</label>
+                        <input type="file" id="imagem" name="imagem"><br>
+
+                        <div class="centered-description">
+                            <label for="comportamento">Comportamento observado (Ex.: falha no sistema, tela azul, lentidão, etc.)</label>
+                            <textarea id="comportamento" name="comportamento" placeholder="Descreva o comportamento observado..." required></textarea>
+                        </div>
+
+                        <label for="responsabilidade">Eu estou de acordo com os termos do site</label>
+                        <input type="checkbox" id="responsabilidade" name="responsabilidade" required><br>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-back">Voltar</button>
+                            <button class="btn btn-submit" type="submit">Enviar</button>
+                        </div>
+                    </section>
                 </form>
             </div>
         </main>
@@ -61,28 +191,43 @@
     </footer>
 
     <script>
-        document.getElementById('contact-form').addEventListener('submit', function(event) {
-            event.preventDefault(); 
-            
-            const formData = new URLSearchParams(new FormData(this)).toString();
+        document.addEventListener('DOMContentLoaded', function() {
+            const nextButtons = document.querySelectorAll('.btn-next');
+            const backButtons = document.querySelectorAll('.btn-back');
+            const sections = document.querySelectorAll('.section');
+            let currentSectionIndex = 0;
 
-            fetch('/submit', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: formData
-            })
-            .then(response => response.text())
-            .then(text => {
-                window.location.href = 'thank-you.html?status=success'; 
-            })
-            .catch(error => {
-                console.error('Erro:', error);
-                window.location.href = 'thank-you.html?status=error'; 
+            function validateSection(sectionIndex) {
+                const inputs = sections[sectionIndex].querySelectorAll('input, select, textarea');
+                for (let input of inputs) {
+                    if (!input.checkValidity()) {
+                        input.reportValidity();
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            nextButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    if (validateSection(currentSectionIndex)) {
+                        sections[currentSectionIndex].classList.remove('active');
+                        currentSectionIndex++;
+                        sections[currentSectionIndex].classList.add('active');
+                    }
+                });
+            });
+
+            backButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    if (currentSectionIndex > 0) {
+                        sections[currentSectionIndex].classList.remove('active');
+                        currentSectionIndex--;
+                        sections[currentSectionIndex].classList.add('active');
+                    }
+                });
             });
         });
     </script>
-
 </body>
 </html>
