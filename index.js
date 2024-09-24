@@ -6,8 +6,6 @@ const connection = require('./db');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 3000;
-const host = '192.168.0.100';
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -18,21 +16,18 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-app.post('/submit', (req, res) => {
+app.post('/api/submit', (req, res) => {
   const { nome, email, setor, assunto, complaint, dataProblema, comportamento, responsabilidade } = req.body;
 
-  // Verificar e-mail
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     return res.status(400).send('E-mail inválido. Por favor, insira um e-mail válido.');
   }
 
-  // Verificar responsabilidade
   if (!responsabilidade) {
     return res.status(400).send('Você deve concordar com os termos do site.');
   }
 
-  // Inserir dados no banco de dados, removendo `tipoSolicitacao`
   const sql = 'INSERT INTO solicitacoes (nome, email, setor, assunto, descricao, dataProblema, comportamento) VALUES (?, ?, ?, ?, ?, ?, ?)';
   connection.query(sql, [nome, email, setor, assunto, complaint, dataProblema, comportamento], (err, result) => {
     if (err) {
@@ -41,7 +36,6 @@ app.post('/submit', (req, res) => {
     }
     console.log('Solicitação salva no banco de dados com sucesso!');
 
-    // Configuração do e-mail
     const transporter = nodemailer.createTransport({
       service: 'Outlook365',
       auth: {
@@ -50,7 +44,6 @@ app.post('/submit', (req, res) => {
       }
     });
 
-    // E-mail para o administrador
     const mailOptionsAdmin = {
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
@@ -156,7 +149,6 @@ app.post('/submit', (req, res) => {
       `
     };
 
-    // E-mail de confirmação para o usuário
     const mailOptionsUser = {
       from: process.env.EMAIL_USER,
       to: email,
@@ -242,7 +234,6 @@ app.post('/submit', (req, res) => {
       `
     };
 
-    // Enviar e-mails
     transporter.sendMail(mailOptionsAdmin, (error, info) => {
       if (error) {
         console.error('Erro ao enviar e-mail para o administrador:', error);
@@ -267,6 +258,4 @@ app.post('/submit', (req, res) => {
   });
 });
 
-app.listen(port, host, () => {
-  console.log(`Servidor rodando em http://${host}:${port}`);
-});
+module.exports = app;
