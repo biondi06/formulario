@@ -13,11 +13,12 @@
   "routes": [
     {
       "src": "/api/submit",
+      "methods": ["POST"],
       "dest": "/index.js"
     },
     {
-      "src": "/.*",
-      "dest": "/public/$0"
+      "src": "/(.*)",
+      "dest": "/public/$1"
     }
   ]
 }
