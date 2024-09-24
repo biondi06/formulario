@@ -6,6 +6,8 @@ const connection = require('./db');
 require('dotenv').config();
 
 const app = express();
+const port = process.env.PORT || 3000;
+const host = '192.168.0.100';
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -16,7 +18,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-app.post('/api/submit', (req, res) => {
+app.post('/submit', (req, res) => {
   const { nome, email, setor, assunto, complaint, dataProblema, comportamento, responsabilidade } = req.body;
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -258,4 +260,6 @@ app.post('/api/submit', (req, res) => {
   });
 });
 
-module.exports = app;
+app.listen(port, host, () => {
+  console.log(`Servidor rodando em http://${host}:${port}`);
+});
