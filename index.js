@@ -223,7 +223,7 @@ app.post('/submit', (req, res) => {
               <img src="https://app.tangerino.com.br/Tangerino/pages/image?banner=14727" alt="Banner">
             </div>
             <h1>Confirmação de Solicitação de TI</h1>
-            <p>Olá, ${nome}!</p>
+            <p>Olá, ${nome}! Tudo bem?</p>
             <p>Recebemos sua solicitação de suporte com o seguinte assunto:</p>
             <p><strong>${assunto}</strong></p>
             <p>Nossa equipe está trabalhando para resolver sua solicitação. Você receberá uma resposta em breve.</p>
